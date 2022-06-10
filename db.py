@@ -15,20 +15,17 @@ class DB:
         output = [{item: data[item] for item in data if item != '_id'} for data in documents]
         return output
 
-    def create(self, data):
-        print("Writing Data")
-        new_document = data['Document']
-        response = self.collection.insert_one(new_document)
+    def create(self, vendor):
+        response = self.collection.insert_one(vendor)
         output = {'Status': 'Successfully Inserted',
                   'Document_ID': str(response.inserted_id)}
 
         return output
 
-    def update(self, data):
-        filt = data['Document']
-        response = self.collection.delete_one(filt)
-        output = {'Status': 'Successfully Deleted' if response.deleted_count > 0 else "Document not found."}
-        return output
+    def update(self, id, data):
+        return self.collection.find_one_and_update(filter={"_id": id},
+                                                   update=data,
+                                                   return_document=True)
 
     def get_all(self):
         return self.collection.find().limit(20)

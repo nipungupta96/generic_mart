@@ -5,12 +5,6 @@ app = Flask(__name__)
 db = DB()
 
 
-def response(status, body):
-    return Response(response=json.dumps(body),
-                    status=status,
-                    mimetype='application/json')
-
-
 @app.route('/')
 def home():
     return response(200, {"status": "ok"})
@@ -42,6 +36,12 @@ def update_vendor(vendor_id):
 @app.route('/vendor/<vendor_id>', methods=["DELETE"])
 def delete_vendor(vendor_id):
     return db.delete(vendor_id)
+
+
+def response(status, body):
+    return Response(response=json.dumps(body),
+                    status=status,
+                    mimetype='application/json')
 
 
 if __name__ == "__main__":
