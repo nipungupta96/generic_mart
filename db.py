@@ -38,13 +38,3 @@ class DB:
     def delete(self, vendor_id):
         self.collection.delete_one({"_id": vendor_id})
         return
-
-
-if __name__ == "__main__":
-    data = {
-        "database": "NipunDb",
-        "collection": "people",
-    }
-
-    mongo_obj = DB(data)
-    print(json.dumps(mongo_obj.read(), indent=4))

@@ -7,7 +7,7 @@ A platform for founders to connect with software vendors
 docker-compose up -d
 python main.py
 ```
-
+~~~~
 Make requests using `httpie`
 
 ```bash
