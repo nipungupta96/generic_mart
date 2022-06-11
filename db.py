@@ -1,6 +1,13 @@
 from flask import Flask, request, json, Response
 from pymongo import MongoClient
 from bson import json_util
+from bson.objectid import ObjectId
+
+
+def handle_bson(func):
+    def wrapper(*args):
+        return json.loads(json_util.dumps(func(*args)))
+    return wrapper
 
 
 class DB:
@@ -11,11 +18,7 @@ class DB:
         self.db = self.client[db]
         self.collection = self.db[collection]
 
-    def read(self):
-        documents = self.collection.find()
-        output = [{item: data[item] for item in data if item != '_id'} for data in documents]
-        return output
-
+    @handle_bson
     def create(self, vendor):
         response = self.collection.insert_one(vendor)
         output = {'Status': 'Successfully Inserted',
@@ -23,17 +26,19 @@ class DB:
 
         return output
 
-    def update(self, id, data):
-        return self.collection.find_one_and_update(filter={"_id": id},
+    @handle_bson
+    def update(self, vendor_id, data):
+        return self.collection.find_one_and_update(filter={"_id": ObjectId(vendor_id)},
                                                    update=data,
                                                    return_document=True)
 
+    @handle_bson
     def get_all(self):
-        data = self.collection.find().limit(20)
-        return json.loads(json_util.dumps(data))
+        return self.collection.find().limit(20)
 
+    @handle_bson
     def get(self, vendor_id):
-        return self.collection.find_one({"_id": vendor_id})
+        return self.collection.find_one({"_id": ObjectId(vendor_id)})
 
     def delete(self, vendor_id):
         self.collection.delete_one({"_id": vendor_id})

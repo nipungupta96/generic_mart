@@ -13,7 +13,7 @@ def home():
 # returns a paginated list of vendors
 @app.route('/vendors', methods=["GET"])
 def get_vendors():
-    return response(200, {"data": [e for e in db.get_all()]})
+    return response(200, {"data": db.get_all()})
 
 
 @app.route('/vendor/<vendor_id>', methods=["GET"])
@@ -41,7 +41,7 @@ def delete_vendor(vendor_id):
 
 # seed some data
 @app.route('/seed', methods=["POST"])
-def home():
+def seed():
     db.create({"name": "microsoft"})
     db.create({"name": "google"})
     db.create({"name": "gupta tech"})
