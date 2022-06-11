@@ -1,5 +1,6 @@
 from flask import Flask, request, json, Response
 from pymongo import MongoClient
+from bson import json_util
 
 
 class DB:
@@ -28,7 +29,8 @@ class DB:
                                                    return_document=True)
 
     def get_all(self):
-        return self.collection.find().limit(20)
+        data = self.collection.find().limit(20)
+        return json.loads(json_util.dumps(data))
 
     def get(self, vendor_id):
         return self.collection.find_one({"_id": vendor_id})
