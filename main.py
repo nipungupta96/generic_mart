@@ -18,24 +18,25 @@ def get_vendors():
 
 @app.route('/vendor/<vendor_id>', methods=["GET"])
 def get_vendor(vendor_id):
-    return db.get(vendor_id)
+    return response(200, db.get(vendor_id))
 
 
 @app.route('/vendor', methods=["POST"])
 def create_vendor():
     vendor = request.json
-    return db.create(vendor)
+    return response(200, db.create(vendor))
 
 
 @app.route('/vendor/<vendor_id>', methods=["PUT"])
 def update_vendor(vendor_id):
     vendor = request.json
-    return db.update(vendor_id, vendor)
+    return response(201, db.update(vendor_id, vendor))
 
 
 @app.route('/vendor/<vendor_id>', methods=["DELETE"])
 def delete_vendor(vendor_id):
-    return db.delete(vendor_id)
+    db.delete(vendor_id)
+    return response(204, {})
 
 
 # seed some data
